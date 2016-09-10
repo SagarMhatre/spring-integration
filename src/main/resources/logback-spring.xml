@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	<logger name="org.springframework" level="WARN" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} -
+				%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="debug">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+	<property name="USER_HOME" value="F:\\TEMP\\Logs" />
+	<!-- If the property is not declared in the configuration file, logback 
+		will look for it in the System properties. Java system properties can be 
+		set on the command line as shown : java -DUSER_HOME="/home/sagar" MyApp2 -->
+
+	<appender name="rollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${USER_HOME}/LatestLogs.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<fileNamePattern>${USER_HOME}/OldLogs.%i.log.zip</fileNamePattern>
+			<minIndex>1</minIndex>
+			<maxIndex>3</maxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>10KB</maxFileSize>
+		</triggeringPolicy>
+		<encoder>
+			<pattern>%-4relative  %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+
+	<logger name="rollingFileLogger" additivity="false">
+		<appender-ref ref="rollingFileAppender" />
+	</logger>
+
+</configuration>
