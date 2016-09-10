@@ -10,7 +10,8 @@ public class SpringIntegrationApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringIntegrationApplication.class, args);
-		runDemo("message-generator-demo.xml");
+		//runDemo("message-generator-demo.xml");
+		runDemo("queue-demo.xml");
 	}
 
 	private static void runDemo(String springXMLFile) {
