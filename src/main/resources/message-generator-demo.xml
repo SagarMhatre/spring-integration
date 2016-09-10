@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+	<!-- Added the integration namespace -->
+
+	<bean class="com.sample.MessageGenerator" id="messageGenerator" />
+	<bean class="com.sample.MessageReader" id="messageReader" />
+
+	<int:channel id="directChannel" />
+
+	<int:inbound-channel-adapter id="messageProducer"
+		ref="messageGenerator" method="generateHelloWorldMessage" channel="directChannel">
+		<int:poller fixed-rate="1000" />
+	</int:inbound-channel-adapter>
+
+	<int:outbound-channel-adapter id="messageConsumer"
+		channel="directChannel" ref="messageReader" method="printMessage" />
+</beans>
