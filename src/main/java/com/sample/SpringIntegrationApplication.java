@@ -11,7 +11,8 @@ public class SpringIntegrationApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringIntegrationApplication.class, args);
 		//runDemo("message-generator-demo.xml");
-		runDemo("queue-demo.xml");
+		//runDemo("queue-demo.xml");
+		runDemo("wire-tap-demo.xml");
 	}
 
 	private static void runDemo(String springXMLFile) {

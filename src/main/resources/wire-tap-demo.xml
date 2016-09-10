@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+	<!-- Added the integration namespace -->
+
+	<bean class="com.sample.MessageGenerator" id="messageGenerator" />
+	<bean class="com.sample.MessageReader" id="messageReader1">
+		<property name="name" value="messageReader1"></property>
+	</bean>
+	<bean class="com.sample.MessageReader" id="messageReader2">
+		<property name="name" value="messageReader2"></property>
+	</bean>
+	
+	<int:channel id="directChannel">
+		<int:interceptors>
+			<int:wire-tap channel="messageConsumer2" />
+		</int:interceptors>
+	</int:channel>
+	
+	<int:inbound-channel-adapter id="messageProducer"
+		ref="messageGenerator" method="generateHelloWorldMessage" channel="directChannel">
+		<int:poller fixed-rate="200" />
+	</int:inbound-channel-adapter>
+
+	<int:outbound-channel-adapter id="messageConsumer1"
+		channel="directChannel" ref="messageReader1" method="printMessagetoConsoleWithName">		
+	</int:outbound-channel-adapter>
+
+	<int:outbound-channel-adapter id="messageConsumer2"
+		 ref="messageReader2" method="printMessagetoConsoleWithName">
+		<!-- A poller should not be specified for endpoint 'messageConsumer2.adapter',  since 'messageConsumer2' is a SubscribableChannel (not pollable). -->
+		<!-- <int:poller fixed-rate="2000" max-messages-per-poll="5" /> -->
+	</int:outbound-channel-adapter>
+
+	
+</beans>
